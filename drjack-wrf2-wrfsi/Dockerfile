@@ -19,7 +19,7 @@ RUN ln -s libnetcdff.so.6 /lib64/libnetcdff.so.5 \
 
 # optional packages
 #RUN yum -y install wget less vim
-
+RUN yum -y install nano
 
 WORKDIR /root/
 
@@ -61,6 +61,10 @@ RUN cd $BASEDIR/WRF/wrfsi/extdata/GEOG \
   && curl -SL ftp://aftp.fsl.noaa.gov/divisions/frd-laps/WRFSI/Geog_Data/soiltype_bot_30s/soiltype_bot_30s.NW.tar.tgz | tar xz \
   && curl -SL ftp://aftp.fsl.noaa.gov/divisions/frd-laps/WRFSI/Geog_Data/soiltype_top_30s/soiltype_top_30s.NW.tar.tgz | tar xz \
   && curl -SL ftp://aftp.fsl.noaa.gov/divisions/frd-laps/WRFSI/Geog_Data/topo_30s/topo_30s.NW.tar.tgz | tar xz
+  && curl -SL ftp://aftp.fsl.noaa.gov/divisions/frd-laps/WRFSI/Geog_Data/landuse_30s/landuse_30s.NE.tar.tgz | tar xz \
+  && curl -SL ftp://aftp.fsl.noaa.gov/divisions/frd-laps/WRFSI/Geog_Data/soiltype_bot_30s/soiltype_bot_30s.NE.tar.tgz | tar xz \
+  && curl -SL ftp://aftp.fsl.noaa.gov/divisions/frd-laps/WRFSI/Geog_Data/soiltype_top_30s/soiltype_top_30s.NE.tar.tgz | tar xz \
+  && curl -SL ftp://aftp.fsl.noaa.gov/divisions/frd-laps/WRFSI/Geog_Data/topo_30s/topo_30s.NE.tar.tgz | tar xz
 
 RUN cp $BASEDIR/WRF/wrfsi/extdata/static/grib_prep.nl.TEMPLATE $BASEDIR/WRF/wrfsi/extdata/static/grib_prep.nl \
   && perl -pi -w -e "\$bdir = \"$BASEDIR\"; s/\/home\/admin\/DRJACK/\$bdir/g;" $BASEDIR/WRF/wrfsi/extdata/static/grib_prep.nl \
@@ -75,9 +79,9 @@ RUN cd $BASEDIR/WRF/wrfsi/JACK \
 
 # Choose appropriate WRFSI grib_prep.exe executable for your region
 # The following is for US-only:
-RUN ln -sf grib_prep.exe.eta $BASEDIR/WRF/wrfsi/bin/grib_prep.exe
+#RUN ln -sf grib_prep.exe.eta $BASEDIR/WRF/wrfsi/bin/grib_prep.exe
 # for the non-US uncomment the following:
-# RUN ln -sf grib_prep.exe.gfs $BASEDIR/WRF/wrfsi/bin/grib_prep.exe
+RUN ln -sf grib_prep.exe.gfs $BASEDIR/WRF/wrfsi/bin/grib_prep.exe
 
 # Patch files to be able to compile with our version or perl:
 COPY wrfsi.patch /root/
